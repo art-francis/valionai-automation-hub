@@ -1,6 +1,7 @@
 import React from 'react';
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import { Link } from "react-router-dom"; // <-- Add this line
 
 const CookiePolicyPage: React.FC = () => {
   return (
@@ -12,7 +13,7 @@ const CookiePolicyPage: React.FC = () => {
             <h1 className="text-3xl font-bold mb-6">Cookie Policy</h1>
 
       <p className="mb-4">
-        This is the Cookie Policy for Our Company, accessible from [Your Website URL].
+        This is the Cookie Policy for Our Company, accessible from https://valionai.com/.
       </p>
 
       <h2 className="text-2xl font-semibold mb-3 mt-6">What Are Cookies</h2>
@@ -145,15 +146,12 @@ const CookiePolicyPage: React.FC = () => {
         preferred contact methods:
       </p>
       <ul className="list-disc list-inside mb-4 ml-4">
-        <li>Email: [Your Contact Email]</li>
-        <li>By visiting this link: [Link to your contact page or relevant section]</li>
+        <li>Email: info@valionai.com</li>
+        <li>By visiting this link: <Link to="/contact" className="text-blue-600 hover:underline">Contact Page</Link></li>
       </ul>
 
       <p className="mt-8 text-sm text-gray-600">
         This Cookie Policy was created with the help of the <a href="https://www.cookiepolicygenerator.com/cookie-policy-generator/" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">Cookie Policy Generator</a>.
-      </p>
-      <p className="mt-4 text-sm text-gray-600">
-        Please replace "[Your Website URL]", "[Your Contact Email]", and "[Link to your contact page or relevant section]" with your actual information. Review this policy to ensure it accurately reflects your cookie usage and complies with all applicable laws and regulations.
       </p>
           </div>
         </section>

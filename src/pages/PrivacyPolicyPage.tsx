@@ -13,7 +13,7 @@ const PrivacyPolicyPage: React.FC = () => {
 
       <p className="mb-4">
         Your privacy is important to us. It is Our Company's policy to respect your privacy regarding any
-        information we may collect from you across our website, [Your Website URL], and other sites we own and
+        information we may collect from you across our website, https://valionai.com/, and other sites we own and
         operate.
       </p>
 
@@ -91,9 +91,6 @@ const PrivacyPolicyPage: React.FC = () => {
         This policy is effective as of May 21, 2025.
       </p>
 
-      <p className="mt-4 text-sm text-gray-600">
-        Please replace "[Your Website URL]" with your actual website URL and review this policy with a legal professional to ensure it meets your specific needs and complies with all applicable laws and regulations.
-      </p>
           </div>
         </section>
       </div>

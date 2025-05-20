@@ -13,7 +13,7 @@ const TermsOfServicePage: React.FC = () => {
 
       <p className="mb-4">
         Welcome to Our Company! These terms and conditions outline the rules and regulations for the use of
-        Our Company's Website, located at [Your Website URL].
+        Our Company's Website, located at https://valionai.com/.
       </p>
 
       <p className="mb-4">
@@ -145,12 +145,9 @@ const TermsOfServicePage: React.FC = () => {
       </p>
 
       <p className="mt-8 text-sm text-gray-600">
-        These terms will be governed by and interpreted in accordance with the laws of [Your Jurisdiction],
+        These terms will be governed by and interpreted in accordance with the laws of Japan,
         and you submit to the non-exclusive jurisdiction of the state and federal courts located in
-        [Your Jurisdiction] for the resolution of any disputes.
-      </p>
-      <p className="mt-4 text-sm text-gray-600">
-        Please replace "[Your Website URL]" and "[Your Jurisdiction]" with your actual website URL and jurisdiction respectively. Review this policy with a legal professional to ensure it meets your specific needs and complies with all applicable laws and regulations.
+        Japan for the resolution of any disputes.
       </p>
           </div>
         </section>
