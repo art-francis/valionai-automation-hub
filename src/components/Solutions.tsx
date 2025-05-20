@@ -57,7 +57,7 @@ const Solutions = () => {
                   {solution.description}
                 </p>
                 <Button asChild variant="outline" size="sm">
-                  <Link to="/solutions">Learn more</Link>
+                  <Link to="/solutions" onClick={() => window.scrollTo(0, 0)}>Learn more</Link>
                 </Button>
               </div>
             </div>

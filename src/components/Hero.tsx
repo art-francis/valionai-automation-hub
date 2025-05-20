@@ -18,13 +18,13 @@ const Hero = () => {
             </p>
             <div className="flex flex-col sm:flex-row gap-4 pt-4">
               <Button asChild size="lg" className="bg-blue-600 hover:bg-blue-700">
-                <Link to="/contact">
+                <Link to="/contact" onClick={() => window.scrollTo(0, 0)}>
                   Book a Free Consultation
                   <ArrowRight className="ml-2 h-5 w-5" />
                 </Link>
               </Button>
               <Button asChild variant="outline" size="lg">
-                <Link to="/solutions">Explore Solutions</Link>
+                <Link to="/solutions" onClick={() => window.scrollTo(0, 0)}>Explore Solutions</Link>
               </Button>
             </div>
           </div>

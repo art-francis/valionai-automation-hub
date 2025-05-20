@@ -120,8 +120,8 @@ const SolutionsPage = () => {
                         </ul>
                       </CardContent>
                       <CardFooter>
-                        <Button>
-                          <Link to="/contact">Request a Demo</Link>
+                        <Button asChild>
+                          <Link to="/contact" onClick={() => window.scrollTo(0, 0)}>Request a Demo</Link>
                         </Button>
                       </CardFooter>
                     </Card>
@@ -140,7 +140,7 @@ const SolutionsPage = () => {
               Schedule a free consultation to discuss how our AI solutions can address your specific business challenges.
             </p>
             <Button size="lg" asChild>
-              <Link to="/contact">Book a Free Consultation</Link>
+              <Link to="/contact" onClick={() => window.scrollTo(0, 0)}>Book a Free Consultation</Link>
             </Button>
           </div>
         </section>
