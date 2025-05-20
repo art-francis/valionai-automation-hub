@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -13,22 +12,130 @@ const Contact = () => {
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [honeypot, setHoneypot] = useState(""); // For spam protection
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsSubmitting(true);
-    
-    // Simulate form submission
-    setTimeout(() => {
-      toast("Message sent!", {
-        description: "We'll get back to you as soon as possible.",
-      });
-      setName("");
-      setEmail("");
-      setMessage("");
-      setIsSubmitting(false);
-    }, 1000);
+  // Form validation states
+  const [errors, setErrors] = useState({
+    name: "",
+    email: "",
+    message: ""
+  });
+
+  // Validation function (returns valid boolean)
+  const validateForm = () => {
+    const newErrors = {
+      name: "",
+      email: "",
+      message: ""
+    };
+
+    let valid = true;
+
+    if (!name.trim()) {
+      newErrors.name = "Name is required";
+      valid = false;
+    }
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!email.trim()) {
+      newErrors.email = "Email is required";
+      valid = false;
+    } else if (!emailRegex.test(email)) {
+      newErrors.email = "Please enter a valid email address";
+      valid = false;
+    }
+    if (!message.trim()) {
+      newErrors.message = "Message is required";
+      valid = false;
+    } else if (message.trim().length < 10) {
+      newErrors.message = "Message must be at least 10 characters";
+      valid = false;
+    }
+
+    setErrors(newErrors);
+    return valid;
   };
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+  
+    // HONEYPOT: If the hidden field is filled, silently block
+    if (honeypot) {
+      setIsSubmitting(false);
+      return;
+    }
+  
+    // Validate first
+    const formIsValid = validateForm();
+    if (!formIsValid) {
+      toast.error("Please fix the errors in the form", {
+        description: "All fields must be filled correctly"
+      });
+      return;
+    }
+  
+    // Only apply rate limit after input validation passes
+    const lastSubmit = Number(localStorage.getItem("contactLastSubmit")) || 0;
+    const now = Date.now();
+    if (now - lastSubmit < 60000) { // 60 seconds
+      toast.error("Please wait before submitting again.", {
+        description: "You can only send a message once every minute."
+      });
+      setIsSubmitting(false);
+      return;
+    }
+  
+    setIsSubmitting(true);
+  
+    try {
+      const webhookUrl = import.meta.env.VITE_WEBHOOK_URL;
+      if (!webhookUrl) {
+        throw new Error("Webhook URL not configured");
+      }
+  
+      const response = await fetch(webhookUrl, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name,
+          email,
+          message
+        }),
+      });
+  
+      if (response.ok) {
+        toast("Message sent!", {
+          description: "We'll get back to you as soon as possible.",
+        });
+  
+        // Only after a successful submission, update the rate limit timestamp
+        localStorage.setItem("contactLastSubmit", now.toString());
+  
+        // Google Analytics event (if gtag is available)
+        if (typeof window.gtag === "function") {
+          window.gtag("event", "contact_form_submit", {
+            event_category: "Contact",
+            event_label: "ValionAI Contact",
+            value: 1,
+          });
+        }
+  
+        setName("");
+        setEmail("");
+        setMessage("");
+      } else {
+        throw new Error("Failed to send message");
+      }
+    } catch (error) {
+      toast.error("Failed to send message", {
+        description: "Please try again later"
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+  
 
   return (
     <section id="contact" className="py-20 px-6 md:px-12 bg-white">
@@ -55,7 +162,7 @@ const Contact = () => {
                 </div>
               </CardContent>
             </Card>
-            
+
             <Card>
               <CardContent className="p-6 flex items-center gap-4">
                 <div className="p-3 rounded-full bg-blue-50">
@@ -67,7 +174,7 @@ const Contact = () => {
                 </div>
               </CardContent>
             </Card>
-            
+
             <Card>
               <CardContent className="p-6 flex items-center gap-4">
                 <div className="p-3 rounded-full bg-blue-50">
@@ -85,17 +192,32 @@ const Contact = () => {
             <Card className="shadow-lg">
               <CardContent className="p-8">
                 <form onSubmit={handleSubmit} className="space-y-6">
+                  {/* Honeypot anti-spam field */}
+                  <input
+                    type="text"
+                    name="website"
+                    value={honeypot}
+                    onChange={e => setHoneypot(e.target.value)}
+                    autoComplete="off"
+                    tabIndex={-1}
+                    style={{ display: "none" }}
+                  />
+
                   <div className="space-y-2">
                     <Label htmlFor="name">Name</Label>
                     <Input 
                       id="name" 
                       value={name}
                       onChange={(e) => setName(e.target.value)}
-                      required
                       placeholder="Your name"
+                      aria-invalid={!!errors.name}
+                      className={errors.name ? "border-red-500" : ""}
                     />
+                    {errors.name && (
+                      <p className="text-sm text-red-500 mt-1">{errors.name}</p>
+                    )}
                   </div>
-                  
+
                   <div className="space-y-2">
                     <Label htmlFor="email">Email</Label>
                     <Input 
@@ -103,23 +225,31 @@ const Contact = () => {
                       type="email"
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
-                      required
                       placeholder="your.email@example.com"
+                      aria-invalid={!!errors.email}
+                      className={errors.email ? "border-red-500" : ""}
                     />
+                    {errors.email && (
+                      <p className="text-sm text-red-500 mt-1">{errors.email}</p>
+                    )}
                   </div>
-                  
+
                   <div className="space-y-2">
                     <Label htmlFor="message">Message</Label>
                     <Textarea
                       id="message"
                       value={message}
                       onChange={(e) => setMessage(e.target.value)}
-                      required
                       rows={5}
                       placeholder="Tell us about your project..."
+                      aria-invalid={!!errors.message}
+                      className={errors.message ? "border-red-500" : ""}
                     />
+                    {errors.message && (
+                      <p className="text-sm text-red-500 mt-1">{errors.message}</p>
+                    )}
                   </div>
-                  
+
                   <Button 
                     type="submit" 
                     disabled={isSubmitting}
