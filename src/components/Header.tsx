@@ -1,6 +1,6 @@
 
 import { Link } from "react-router-dom";
-import { 
+import {
   NavigationMenu,
   NavigationMenuList,
   NavigationMenuItem,
@@ -46,9 +46,14 @@ const Header = () => {
             </NavigationMenuItem>
             <NavigationMenuItem>
               <NavigationMenuLink asChild>
-                <Link to="/blog" className="text-gray-700 hover:text-blue-600 font-medium">
+                <a
+                  href="https://blog.valionai.com"
+                  className="..."         // keep your styling
+                  target="_blank"         // open in new tab (optional, but recommended for external)
+                  rel="noopener noreferrer"
+                >
                   Blog
-                </Link>
+                </a>
               </NavigationMenuLink>
             </NavigationMenuItem>
             <NavigationMenuItem>
@@ -62,8 +67,8 @@ const Header = () => {
         </NavigationMenu>
 
         {/* Mobile Navigation Toggle */}
-        <button 
-          className="md:hidden text-gray-700" 
+        <button
+          className="md:hidden text-gray-700"
           onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
         >
           <Menu size={24} />
