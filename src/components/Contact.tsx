@@ -3,7 +3,8 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { toast } from "@/components/ui/use-toast";
+import { Textarea } from "@/components/ui/textarea";
+import { toast } from "@/components/ui/sonner";
 import { Card, CardContent } from "@/components/ui/card";
 import { Mail, Phone, MapPin } from "lucide-react";
 
@@ -19,8 +20,7 @@ const Contact = () => {
     
     // Simulate form submission
     setTimeout(() => {
-      toast({
-        title: "Message sent!",
+      toast("Message sent!", {
         description: "We'll get back to you as soon as possible.",
       });
       setName("");
@@ -110,13 +110,12 @@ const Contact = () => {
                   
                   <div className="space-y-2">
                     <Label htmlFor="message">Message</Label>
-                    <textarea
+                    <Textarea
                       id="message"
                       value={message}
                       onChange={(e) => setMessage(e.target.value)}
                       required
                       rows={5}
-                      className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
                       placeholder="Tell us about your project..."
                     />
                   </div>
